@@ -66,17 +66,24 @@ class ViewController: UIViewController {
         }
 
         updateStory()
-        
-        // if our index > 2, we're at a story endpoint
-        if mStoryIndex > 2 {
-            hideButtons()
-        }
-    
     }
     
     func resetStory() {
         mStoryIndex = 0
         updateStory()
+    }
+    
+    func presentResetAlert() {
+        let alert = UIAlertController(title: "Awesome",
+                                      message: "You've finished the story; start over?",
+                                      preferredStyle: .actionSheet)
+        let restartAction = UIAlertAction(title: "Restart",
+                                          style: .default,
+                                          handler: { (UIAlertAction) in
+                                            self.resetStory()
+        })
+        alert.addAction(restartAction)
+        present(alert, animated: true, completion: nil)
     }
     
     func updateStory() {
@@ -85,6 +92,10 @@ class ViewController: UIViewController {
         if mStoryIndex < 3 {
             topButton.setTitle(mAnsAArray[mStoryIndex], for: .normal)
             bottomButton.setTitle(mAnsBArray[mStoryIndex], for: .normal)
+            showButtons()
+        } else {
+            hideButtons()
+            presentResetAlert()
         }
     }
 
