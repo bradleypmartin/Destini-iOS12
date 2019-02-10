@@ -28,7 +28,7 @@ class ViewController: UIViewController {
     let story5 = "As you smash through the guardrail and careen towards the jagged rocks below you reflect on the dubious wisdom of stabbing someone while they are driving a car you are in."
     let story6 = "You bond with the murderer while crooning verses of \"Can you feel the love tonight\". He drops you off at the next town. Before you go he asks you if you know any good places to dump bodies. You reply: \"Try the pier.\""
     
-    // initializing arrays
+    // initializing arrays (that will hold story/choice elements
     var mStoryArray = [String]()
 
     var mAnsAArray = [String]()
@@ -42,7 +42,7 @@ class ViewController: UIViewController {
     // story state variable
     var mStoryIndex : Int = 0
     
-    // story graph
+    // story graph (1-indexed graph of story progress)
     let mProgressGraph = [[3,2],[3,4],[6,5]]
     
     override func viewDidLoad() {
@@ -57,15 +57,17 @@ class ViewController: UIViewController {
     
     // User presses one of the buttons
     @IBAction func buttonPressed(_ sender: UIButton) {
-    
+        
+        // progress story according to graph
         if sender.tag == 1 {
             mStoryIndex = mProgressGraph[mStoryIndex][0]-1
         } else {
             mStoryIndex = mProgressGraph[mStoryIndex][1]-1
         }
-                
+
         updateStory()
         
+        // if our index > 2, we're at a story endpoint
         if mStoryIndex > 2 {
             hideButtons()
         }
@@ -79,6 +81,7 @@ class ViewController: UIViewController {
     
     func updateStory() {
         storyTextView.text = mStoryArray[mStoryIndex]
+        // story still in progress -> update buttons as well
         if mStoryIndex < 3 {
             topButton.setTitle(mAnsAArray[mStoryIndex], for: .normal)
             bottomButton.setTitle(mAnsBArray[mStoryIndex], for: .normal)
@@ -96,7 +99,7 @@ class ViewController: UIViewController {
     }
     
     func initArrays() {
-        // collecting story/choices into arrays for ref
+        // collecting story/choices into arrays for ease of reference
         mStoryArray = [story1, story2, story3, story4, story5, story6]
         
         mAnsAArray = [answer1a, answer2a, answer3a]
