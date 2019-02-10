@@ -9,7 +9,7 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    
     // Our strings
     let story1 = "Your car has blown a tire on a winding road in the middle of nowhere with no cell phone reception. You decide to hitchhike. A rusty pickup truck rumbles to a stop next to you. A man with a wide brimmed hat with soulless eyes opens the passenger door for you and asks: \"Need a ride, boy?\"."
     let answer1a = "I\'ll hop in. Thanks for the help!"
@@ -28,38 +28,80 @@ class ViewController: UIViewController {
     let story5 = "As you smash through the guardrail and careen towards the jagged rocks below you reflect on the dubious wisdom of stabbing someone while they are driving a car you are in."
     let story6 = "You bond with the murderer while crooning verses of \"Can you feel the love tonight\". He drops you off at the next town. Before you go he asks you if you know any good places to dump bodies. You reply: \"Try the pier.\""
     
+    // initializing arrays
+    var mStoryArray = [String]()
+
+    var mAnsAArray = [String]()
+    var mAnsBArray = [String]()
     
     // UI Elements linked to the storyboard
     @IBOutlet weak var topButton: UIButton!         // Has TAG = 1
     @IBOutlet weak var bottomButton: UIButton!      // Has TAG = 2
     @IBOutlet weak var storyTextView: UILabel!
     
-    // TODO Step 5: Initialise instance variables here
+    // story state variable
+    var mStoryIndex : Int = 0
     
-    
-    
+    // story graph
+    let mProgressGraph = [[3,2],[3,4],[6,5]]
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-        // TODO Step 3: Set the text for the storyTextView, topButton, bottomButton, and to T1_Story, T1_Ans1, and T1_Ans2
-        
+
+        // setting up arrays, first story and choices
+        initArrays()
+        resetStory()
+        showButtons()
     }
 
     
     // User presses one of the buttons
     @IBAction func buttonPressed(_ sender: UIButton) {
     
-        // TODO Step 4: Write an IF-Statement to update the views
+        if sender.tag == 1 {
+            mStoryIndex = mProgressGraph[mStoryIndex][0]-1
+        } else {
+            mStoryIndex = mProgressGraph[mStoryIndex][1]-1
+        }
                 
-        // TODO Step 6: Modify the IF-Statement to complete the story
+        updateStory()
         
+        if mStoryIndex > 2 {
+            hideButtons()
+        }
     
     }
     
+    func resetStory() {
+        mStoryIndex = 0
+        updateStory()
+    }
+    
+    func updateStory() {
+        storyTextView.text = mStoryArray[mStoryIndex]
+        if mStoryIndex < 3 {
+            topButton.setTitle(mAnsAArray[mStoryIndex], for: .normal)
+            bottomButton.setTitle(mAnsBArray[mStoryIndex], for: .normal)
+        }
+    }
 
-
+    func hideButtons() {
+        topButton.isHidden = true
+        bottomButton.isHidden = true
+    }
+    
+    func showButtons() {
+        topButton.isHidden = false
+        bottomButton.isHidden = false
+    }
+    
+    func initArrays() {
+        // collecting story/choices into arrays for ref
+        mStoryArray = [story1, story2, story3, story4, story5, story6]
+        
+        mAnsAArray = [answer1a, answer2a, answer3a]
+        mAnsBArray = [answer1b, answer2b, answer3b]
+    }
 
 }
 
